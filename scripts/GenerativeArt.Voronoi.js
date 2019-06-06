@@ -120,7 +120,7 @@ function(settings) {
     
     function drawGeneration(generationData, drawingContext) {
 
-        var PIXEL_SIZE = DRAWN_POINT_SIZE = 10;
+        var PIXEL_SIZE = DRAWN_POINT_SIZE = 4;
 
         drawingContext.clearRect(0, 0, stageWidth, stageHeight);
         var points = [];
