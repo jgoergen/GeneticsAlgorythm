@@ -132,11 +132,18 @@
                     lastAverage - 
                     data.average;
 
-                console
-                    .log(
-                        addCommas(
-                            Math.floor(data.average)) + 
-                            " ( - " + addCommas(Math.floor(diff)) + " )");
+                if (Math.abs(diff) < 200000) {
+                        
+                    var barGraph = "";
+                    for (var i = 0; i < (Math.abs(Math.floor(diff)) / 1000); i++)
+                        barGraph += diff > 0 ? "|" : "-";
+
+                    console.log(barGraph);
+                    
+                } else {
+
+                    console.log(addCommas(Math.floor(diff)));
+                }
                         
                 $("#output")
                 .html(
