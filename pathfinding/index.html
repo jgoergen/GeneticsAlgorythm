@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <style type="text/css">
+
+    body {
+    }
+    
+    #canvas { 
+        border: 1px solid black; 
+    }
+    
+    #img1 { 
+        border: 1px solid black; 
+        position:absolute;
+        opacity: 0.2;
+    }
+    
+    #output { 
+        border: 1px solid black; 
+        min-height: 40px;
+        width: 100%;
+        font-weight: bold; 
+        font-size:19px; 
+    }
+    
+    #history img { 
+        padding: 1px; 
+        border: 1px solid black; 
+    }
+
+    </style>
+
+    <title>generative Art TRI by JSizzle</title>
+</head>
+
+<body>
+
+    <div style="height: 522px;">
+        <canvas id="canvas" width="512" height="512"></canvas>
+    </div>
+    <div id="output"></div><br>
+    <div id="history"></div><br><br>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./scripts/GeneticsAlgorythm.js"></script>
+    <script type="text/javascript" src="./scripts/PathFinding.js"></script>
+
+    <script type='text/javascript'>
+
+        // WORK HERE ///////////////////////////////////////////////////////////////
+
+        // SETTINGS /////////////////////////////
+
+        var CREATE_NEW_STEPS = 40; // number of steps to use
+        var NUMBER_OF_GENERATIONS = 50; // number of threads to run at a time
+        var CROSSOVER_RATE = 0.5; // percentage of generations to crossover
+        var CROSSOVER_POSITION = 0.7; // position in the chain a crossover happens
+        var BASE_MUTATION_RATE = 0.2; // percent change of mutation
+        var MAX_MUTATION_RATE = 0.2;
+        var MUTATION_INCREASE_RATE = 0.01;
+        var STAGE_WIDTH = 512;
+        var STAGE_HEIGHT = 512;
+        var BAD_ITERATION_RESET = 0;
+        var BEST_THRESHOLD = 1;
+        var DEBUG = true;
+
+        ////////////////////////////////////////
+
+        var lastBest = 
+            lastAverage = 9999999999;
+
+        var pathFinder = undefined;
+
+        var pause = 
+            false;
+
+        function init() {
+
+            pathFinder = 
+                new PathFinder({
+                    createNewSteps: CREATE_NEW_STEPS,
+                    numberOfGenerations: NUMBER_OF_GENERATIONS,
+                    crossoverRate: CROSSOVER_RATE,
+                    crossoverPosition: CROSSOVER_POSITION,
+                    baseMutationRate: BASE_MUTATION_RATE,
+                    maxMutationRate: MAX_MUTATION_RATE,
+                    mutationIncreaseRate: MUTATION_INCREASE_RATE,
+                    stageWidth: STAGE_WIDTH,
+                    stageHeight: STAGE_HEIGHT,
+                    badIterationResest: BAD_ITERATION_RESET,
+                    ctx: ctx,
+                    completeCallback: completeCallback,
+                    debug: DEBUG
+                });
+
+            setTimeout(update, 0);
+        }
+
+        function completeCallback(imageDataUrl) {
+
+            $("#history").append("<img src='" + imageDataUrl + "' width='50'>");
+            pause = true;
+            console.log("DONE!");
+        }
+
+        function update() {
+
+            if (pause == true)
+                return;
+
+            var data = pathFinder.iterate(ctx);
+
+            if (data.iterated) {
+
+                var diff = 
+                    lastAverage - 
+                    data.average;
+
+                if (Math.abs(diff) < 200000) {
+                        
+                    var roundPhrase = data.round.toString();
+
+                    while (roundPhrase.length < 4)
+                        roundPhrase = "0" + roundPhrase;
+
+                    var barGraph = "";
+                    for (var i = 0; i < (Math.abs(diff * 10)); i++)
+                        barGraph += diff > 0 ? "|" : "-";
+
+                    console.log(roundPhrase + ": " + barGraph);
+                    
+                } else {
+
+                    console.log(diff);
+                }
+                        
+                $("#output")
+                .html(
+                    "Round: " + data.round + 
+                    ", Average: " + data.average);
+
+                if(data.average < (lastBest - BEST_THRESHOLD)) {
+
+                    $("#history")
+                    .append(
+                        "<img src='" + 
+                        data.image + 
+                        "' width='50'>");
+
+                    lastBest = data.average;
+                }
+
+                lastAverage = data.average;
+            }
+
+            setTimeout(update, 0);
+        }
+
+        function mouseDown(e) {
+
+            // e.pageX e.pageY
+        }
+
+        function mouseUp(e) {
+
+        }
+
+        function mouseMove(e) {
+
+            // e.pageX e.pageY
+        }
+
+        function secondaryMouseDown(e) {
+
+            // e.pageX e.pageY
+        }
+
+        function secondaryMouseUp(e) {
+
+        }
+
+        function secondaryMouseMove(e) {
+
+            // e.pageX e.pageY
+        }
+
+        function addCommas(val) {
+
+            while (/(\d+)(\d{3})/.test(val.toString()))
+                val = val.toString().replace(/(\d+)(\d{3})/, '$1' + ',' + '$2');
+
+            return val;
+        }
+
+        // 'UNDER THE HOOD' ////////////////////////////////////////////////////////
+
+        var ctx,
+            canvas = 
+                undefined;
+
+        var isMouseDown,
+            isSecondaryMouseDown = 
+                false;
+
+        window
+        .onload = 
+            function() {
+
+                canvas = 
+                    document
+                    .getElementById(
+                        "canvas");
+
+                ctx = 
+                    canvas
+                    .getContext(
+                        "2d");
+
+                if (('ontouchstart' in window || 'onmsgesturechange' in window)) {
+
+                    document
+                    .addEventListener(
+                        "touchstart", 
+                        touchStartHanlder, 
+                        false);
+
+                    document
+                    .addEventListener(
+                        "touchmove", 
+                        touchMoveHanlder, 
+                        false);
+
+                    document
+                    .addEventListener(
+                        "touchend", 
+                        touchEndHanlder, 
+                        false);
+
+                } else {
+
+                    canvas
+                    .addEventListener(
+                        "mousemove", 
+                        mouseMoveHandler, 
+                        false);
+                        
+                    canvas
+                    .addEventListener(
+                        "mousedown", 
+                        mouseDownHandler, 
+                        false);
+                        
+                    canvas
+                    .addEventListener(
+                        "mouseup", 
+                        mouseUpHandler, 
+                        false);
+                }
+
+                init();                
+            }
+
+            function touchStartHanlder(e) {
+
+                if (e.touches.length == 1)
+                    mouseDown(e.touches[0]);
+                else if (e.touches.length == 2)
+                    secondaryMouseDown(e.touches[0]);
+            }
+
+            function touchEndHanlder(e) {
+
+                if (e.touches.length == 0)
+                    mouseUp();
+                else if (e.touches.length == 1)
+                    secondaryMouseUp();
+            }
+
+            function touchMoveHanlder(e) {
+
+                if (e.touches.length == 1)
+                    mouseMove(e.touches[0]);
+                else if (e.touches.length == 2)
+                    secondaryMouseMove(e.touches[0]);
+            }
+
+            function mouseDownHandler(e) {
+
+                if ((e.which === 3 || e.button === 2)) {
+
+                    isSecondaryMouseDown = true;
+                    secondaryMouseDown(e);
+                } else {
+
+                    isMouseDown = true;
+                    mouseDown(e);
+                }
+            }
+
+            function mouseUpHandler(e) {
+
+                if ((e.which === 3 || e.button === 2)) {
+
+                    isSecondaryMouseDown = false;
+                    secondaryMouseUp(e);
+                } else {
+
+                    isMouseDown = false;
+                    mouseUp(e);
+                }
+            }
+
+            function mouseMoveHandler(e) {
+
+                if (isMouseDown)
+                    mouseMove(e);
+                else if (isSecondaryMouseDown)
+                    secondaryMouseMove(e);
+            }
+
+    </script>
+</body>
+
+</html>
