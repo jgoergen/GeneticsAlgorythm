@@ -78,6 +78,8 @@
         var BAD_ITERATION_RESET = 20;
         var MIN_TRIANGLE_VOLUME = SMALLEST_TRIANGLE_SIZE;
         var BEST_THRESHOLD = 50000;
+        var GRAPH_VAL_MULTIPLIER = 0.0005;
+        var DEBUG = false;
 
         ////////////////////////////////////////
 
@@ -110,7 +112,8 @@
                     stageHeight: STAGE_HEIGHT,
                     pixelCheckSkip: PIXEL_CHECK_SKIP,
                     badIterationResest: BAD_ITERATION_RESET,
-                    minTriangleVolume: MIN_TRIANGLE_VOLUME
+                    minTriangleVolume: MIN_TRIANGLE_VOLUME,
+                    debug: DEBUG
                 });
 
             requestAnimationFrame(update);
@@ -135,7 +138,7 @@
                 if (Math.abs(diff) < 200000) {
                         
                     var barGraph = "";
-                    for (var i = 0; i < (Math.abs(Math.floor(diff)) / 1000); i++)
+                    for (var i = 0; i < (Math.abs(Math.floor(diff)) * GRAPH_VAL_MULTIPLIER); i++)
                         barGraph += diff > 0 ? "|" : "-";
 
                     console.log(barGraph);
