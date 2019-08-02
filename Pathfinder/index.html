@@ -45,7 +45,7 @@
     <div id="history"></div><br><br>
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script type="text/javascript" src="./scripts/GeneticsAlgorythm.js"></script>
+    <script type="text/javascript" src="../GeneticsAlgorythm.js"></script>
     <script type="text/javascript" src="./scripts/PathFinding.js"></script>
 
     <script type='text/javascript'>
@@ -65,7 +65,8 @@
         var STAGE_HEIGHT = 512;
         var BAD_ITERATION_RESET = 0;
         var BEST_THRESHOLD = 1;
-        var DEBUG = true;
+        var GRAPH_VAL_MULTIPLIER = 5;
+        var DEBUG = false;
 
         ////////////////////////////////////////
 
@@ -127,14 +128,11 @@
                         roundPhrase = "0" + roundPhrase;
 
                     var barGraph = "";
-                    for (var i = 0; i < (Math.abs(diff * 10)); i++)
+                    for (var i = 0; i < (Math.abs(diff * GRAPH_VAL_MULTIPLIER)); i++)
                         barGraph += diff > 0 ? "|" : "-";
 
                     console.log(roundPhrase + ": " + barGraph);
                     
-                } else {
-
-                    console.log(diff);
                 }
                         
                 $("#output")

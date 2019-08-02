@@ -12,7 +12,7 @@ var PathFinder =
         };
 
         // hueristics
-        var REWALK_PENALTY = 0.2;
+        var REWALK_PENALTY = 0.5;
         var WALL_PENALTY = 1;
         var DISTANCE_MULTIPLIER = 2;
 
@@ -35,8 +35,11 @@ var PathFinder =
         var graphicCache = {};
         var completeCallback = undefined;
         var debug = false;
+        var mapGenerationFunction = undefined;
 
         function init(settings) {
+
+            mapGenerationFunction = generateSimpleMap;
 
             stageWidth = settings.stageWidth;
             stageHeight = settings.stageHeight;
@@ -69,11 +72,11 @@ var PathFinder =
                     crossoverPosition: settings.crossoverPosition
                 });
 
-            floor = generateEmptyMap();
+            floor = mapGenerationFunction();
         }
 
         // hard map
-        function dgenerateEmptyMap() {
+        function generateChallengingMap() {
 
             var map = new Array();
             map.push(new Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
@@ -91,6 +94,29 @@ var PathFinder =
             map.push(new Array(1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1));
             map.push(new Array(1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1));
             map.push(new Array(1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+            return map;
+        }
+
+        // test simple map
+        function generateSimpleMap() {
+
+            var map = new Array();
+            map.push(new Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+            map.push(new Array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 5, 1));
+            map.push(new Array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
+            map.push(new Array(1, 8, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1));
             map.push(new Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
             return map;
         }
@@ -225,7 +251,7 @@ var PathFinder =
 
             var currentX = startX;
             var currentY = startY;
-            var tmpMap = generateEmptyMap();
+            var tmpMap = mapGenerationFunction();
 
             for (var i = 0; i < generationData.length; i++) {
 
@@ -259,7 +285,7 @@ var PathFinder =
             var currentX = startX;
             var currentY = startY;
             var penalty = 0;
-            var tmpMap = generateEmptyMap();
+            var tmpMap = mapGenerationFunction();
             var shortestDistance = 999999;
 
             for (var i = 0; i < generationData.length; i++) {

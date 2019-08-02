@@ -13,7 +13,7 @@ var GeneticsAlgorythm =
             maxMutationRate,
             mutationIncreaseRate,
             crossoverRate,
-            badIterationResest,
+            badIterationReset,
             crossoverPosition =
                 0;
 
@@ -32,7 +32,7 @@ var GeneticsAlgorythm =
             baseMutationRate = settings.baseMutationRate;
             maxMutationRate = settings.maxMutationRate;
             mutationIncreaseRate = settings.mutationIncreaseRate;
-            badIterationResest = settings.badIterationResest;
+            badIterationReset = settings.badIterationReset || 0;
             crossoverRate = settings.crossoverRate;
             crossoverPosition = settings.crossoverPosition;
             mutationRate = baseMutationRate;
@@ -180,18 +180,18 @@ var GeneticsAlgorythm =
 
             average = (totalFitness / generations.length);
 
-            if (badIterationResest > 0) {
+            if (average < bestAverage) {
 
-                if (average < bestAverage) {
+                bestAverage = average;
+                //runGeneration(generations[bestIndex].data);
+                mutationRate = baseMutationRate;
+                badIterations = 0;
+                lastGoodSet = generations;
+                wasGood = true;
 
-                    bestAverage = average;
-                    //runGeneration(generations[bestIndex].data);
-                    mutationRate = baseMutationRate;
-                    badIterations = 0;
-                    lastGoodSet = generations;
-                    wasGood = true;
+            } else {
 
-                } else {
+                if (badIterationReset > 0) {
 
                     badIterations ++;
 
@@ -199,7 +199,7 @@ var GeneticsAlgorythm =
                         mutationRate += mutationIncreaseRate;
 
                     // too many bad variations, revert to last good.
-                    if (badIterations > badIterationResest) {
+                    if (badIterations > badIterationReset) {
 
                         var newGenerationsFitness = [];
                         for (var i = 0; i < numberOfGenerations; i++)
