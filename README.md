@@ -3,6 +3,12 @@
 ## Wtf is this?!
 It's mostly just a personal spin on a common Genetics Algorythm and experimenting with uses for it. This is very much a work in progress and meant more for learning and experimenting then practical application.
 
+## Todo
+* Speed things up
+* Move all example code into js files, so index files are purely for bootstrapping
+* More examples
+* Rebuild in faster languages
+
 # Examples
 
 ## Pathfinder
