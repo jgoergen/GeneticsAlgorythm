@@ -84,10 +84,10 @@ var GeneticsAlgorythm =
                 { data: [], val: 0, check: true };
 
             // perform crossover between parents
-            var crossoverPosition =
-                Math.floor(fatherGeneration.data.length & crossoverPosition);
+            var newCrossoverPosition =
+                Math.floor(fatherGeneration.data.length * crossoverPosition);
 
-            for (var i = 0; i < crossoverPosition; i++) {
+            for (var i = 0; i < newCrossoverPosition; i++) {
 
                 baby1Generation.data.push(
                     cloneNode(
@@ -98,7 +98,7 @@ var GeneticsAlgorythm =
                         motherGeneration.data[i]));
             }
 
-            for (var o = crossoverPosition; o < fatherGeneration.data.length; o++) {
+            for (var o = newCrossoverPosition; o < fatherGeneration.data.length; o++) {
 
                 baby2Generation
                     .data
