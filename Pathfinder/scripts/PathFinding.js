@@ -12,9 +12,9 @@ var PathFinder =
         };
 
         // hueristics
-        var REWALK_PENALTY = 0.5;
+        var REWALK_PENALTY = 1;
         var WALL_PENALTY = 1;
-        var DISTANCE_MULTIPLIER = 2;
+        var DISTANCE_MULTIPLIER = 4;
 
         var ga = null;
 
@@ -39,7 +39,7 @@ var PathFinder =
 
         function init(settings) {
 
-            mapGenerationFunction = generateSimpleMap;
+            mapGenerationFunction = generateChallengingMap;
 
             stageWidth = settings.stageWidth;
             stageHeight = settings.stageHeight;

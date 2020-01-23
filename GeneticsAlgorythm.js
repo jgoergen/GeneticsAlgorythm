@@ -27,8 +27,8 @@ var GeneticsAlgorythm =
 
             fitnessFunction = settings.fitnessFunction;
             newRandomGenerationFunction = settings.newRandomGenerationFunction;
-            mutationFunction =settings.mutationFunction;
-            numberOfGenerations =settings.numberOfGenerations;
+            mutationFunction = settings.mutationFunction;
+            numberOfGenerations = settings.numberOfGenerations;
             baseMutationRate = settings.baseMutationRate;
             maxMutationRate = settings.maxMutationRate;
             mutationIncreaseRate = settings.mutationIncreaseRate;
@@ -193,7 +193,7 @@ var GeneticsAlgorythm =
 
                 if (badIterationReset > 0) {
 
-                    badIterations ++;
+                    badIterations++;
 
                     if (mutationRate < maxMutationRate)
                         mutationRate += mutationIncreaseRate;
@@ -238,9 +238,9 @@ var GeneticsAlgorythm =
                         return 0;
                 });
 
-            var keepCount = Math.floor(tmpArr.length * ( 1 - crossoverRate));
+            var keepCount = Math.floor(tmpArr.length * (1 - crossoverRate));
             if (keepCount % 2 != 0)
-                keepCount --;
+                keepCount--;
 
             for (var i = 0; i < keepCount; i++)
                 newGenerations.push(generations[tmpArr[i].i]);
@@ -250,7 +250,7 @@ var GeneticsAlgorythm =
                 var firstGenToCrossOver = Math.floor(Math.random() * (keepCount / 3));
                 var secondGenToCrossOver = Math.floor(Math.random() * (keepCount / 3));
 
-                while(firstGenToCrossOver == secondGenToCrossOver)
+                while (firstGenToCrossOver == secondGenToCrossOver)
                     secondGenToCrossOver = Math.floor(Math.random() * (keepCount / 3));
 
                 var COResult =
