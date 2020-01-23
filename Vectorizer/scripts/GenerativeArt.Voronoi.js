@@ -248,11 +248,21 @@ function(settings) {
     }
 
     function mutateNode(targetNode) {
-                        
-        var movePolarity = Math.random() <= 0.5 ? 1 : -1;
-        var moveDist = Math.floor(Math.random() * stageWidth) * movePolarity;
-
-        return fixVal(targetNode += moveDist, stageWidth);
+        
+        switch(Math.floor(Math.random() * 5)) {
+            case 0:
+                var movePolarity = Math.random() <= 0.5 ? 1 : -1;
+                var moveDist = Math.floor(Math.random() * 255) * movePolarity;
+        
+                return fixVal(targetNode += moveDist, stageWidth);
+                
+            default:
+                var movePolarity = Math.random() <= 0.5 ? 1 : -1;
+                var moveDist = Math.floor(Math.random() * 10) * movePolarity;
+        
+                return fixVal(targetNode += moveDist, stageWidth);
+        }
+        
     }
     
     function iterate() {
